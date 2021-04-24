@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="flex min-h-screen dark:bg-black">
+    <div className="flex justify-center text-center min-h-screen dark:bg-black">
       <LineGraph></LineGraph>
     </div>
   );
