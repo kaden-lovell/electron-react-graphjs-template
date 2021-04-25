@@ -1,7 +1,39 @@
 import { Component } from "react";
 import useDarkMode from "../hooks/useDarkMode";
 class Nav extends Component {
+  state = {
+    // initalize with no file selected
+    selectedFile: null,
+  };
+
+  fileData = () => {
+    if (this.state.selectedFile) {
+      return (
+        <div>
+          <h2>File Details:</h2>
+          <p>File Name: {this.state.selectedFile.name}</p>
+          <p>File Type: {this.state.selectedFile.type}</p>
+
+          <p>Last Modified: {this.state.selectedFile.lastModifiedDate.toDateString()}</p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <br />
+          <h4>Choose before Pressing the Upload button</h4>
+        </div>
+      );
+    }
+  };
+
   render() {
+    // set selected file event
+    const onFileChange = (e) => {
+      this.state.selectedFile = e.target.files[0];
+      console.log(this.state.selectedFile);
+    };
+
     return (
       <div>
         <nav className="bg-gray-800">
@@ -16,12 +48,7 @@ class Nav extends Component {
             </div>
             <div className="md:block">
               <div className="mr-6 ml-3 flex items-center md:ml-6">
-                <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                  <span className="sr-only">View notifications</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                </button>
+                <input onChange={onFileChange} id="file-input" type="file" name="file-input" className="dark:text-white" />
               </div>
             </div>
           </div>
@@ -29,8 +56,10 @@ class Nav extends Component {
       </div>
     );
   }
+  handleUpload() {
+    console.log("he there");
+  }
 }
-
 function DarkModeToggle() {
   const [colorTheme, setTheme] = useDarkMode();
 
@@ -51,5 +80,4 @@ function DarkModeToggle() {
     </div>
   );
 }
-
 export default Nav;
