@@ -1,12 +1,20 @@
 import LineGraph from "./components/LineGraph";
+import Nav from "./components/Nav";
 import "./App.css";
 
-function App() {
+export default function App() {
+  const uploadedFile = new File([], "");
   return (
-    <div className="flex justify-center text-center min-h-screen dark:bg-black">
-      <LineGraph></LineGraph>
+    <div>
+      <div id="navbar">
+        <Nav></Nav>
+      </div>
+
+      <div id="content">
+        <div className="flex justify-center text-center min-h-screen dark:bg-black">
+          <LineGraph></LineGraph>
+        </div>
+      </div>
     </div>
   );
 }
-
-export default App;
