@@ -3,7 +3,6 @@ import Nav from "./components/Nav";
 import "./App.css";
 
 export default function App() {
-  const uploadedFile = new File([], "");
   return (
     <div>
       <div id="navbar">

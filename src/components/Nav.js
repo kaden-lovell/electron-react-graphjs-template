@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { parseIsolatedEntityName } from "typescript";
 import useDarkMode from "../hooks/useDarkMode";
 class Nav extends Component {
   state = {
@@ -6,32 +7,14 @@ class Nav extends Component {
     selectedFile: null,
   };
 
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-          <p>File Name: {this.state.selectedFile.name}</p>
-          <p>File Type: {this.state.selectedFile.type}</p>
-
-          <p>Last Modified: {this.state.selectedFile.lastModifiedDate.toDateString()}</p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
-    }
-  };
-
   render() {
     // set selected file event
     const onFileChange = (e) => {
-      this.state.selectedFile = e.target.files[0];
-      console.log(this.state.selectedFile);
+      var reader = new FileReader();
+      reader.onload = (response) => {
+        this.processCsvData(response.target.result);
+      };
+      reader.readAsText(e.target.files[0]);
     };
 
     return (
@@ -56,10 +39,25 @@ class Nav extends Component {
       </div>
     );
   }
-  handleUpload() {
-    console.log("he there");
+
+  processCsvData(content) {
+    var data = content.split("\n");
+    var headers = data[0].split(",");
+    var rows = data;
+    var list = [];
+    var obj = {};
+    for (var i = 0; i < rows.length; i++) {
+      var result = {};
+      for (var j = 0; j < headers.length; j++) {
+        result[headers[j]] = rows[i].split(",")[j];
+      }
+      list.push(result);
+      console.log(result);
+    }
+    console.log(list);
   }
 }
+
 function DarkModeToggle() {
   const [colorTheme, setTheme] = useDarkMode();
 
@@ -71,13 +69,14 @@ function DarkModeToggle() {
         </a>
       </div>
     );
+  } else {
+    return (
+      <div>
+        <a onClick={() => setTheme(colorTheme)} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+          Dark Mode
+        </a>
+      </div>
+    );
   }
-  return (
-    <div>
-      <a onClick={() => setTheme(colorTheme)} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-        Dark Mode
-      </a>
-    </div>
-  );
 }
 export default Nav;
